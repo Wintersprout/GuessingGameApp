@@ -31,29 +31,39 @@ public class MainActivity extends AppCompatActivity {
         String guessTxt = txtGuess.getText().toString();
         String message = "";
 
-        numberOfTries--;
-
         try {
             int guess = Integer.parseInt(guessTxt);
-
+            numberOfTries--;
 
             if (guess < theNumber)
-                message = guessTxt + " is too low. Try again.";
+                message = guessTxt + " is too low. " +
+                        numberOfTries + " tries left.";
             else if (guess > theNumber)
-                message = guessTxt + " is too high. Try again.";
+                message = guessTxt + " is too high. " +
+                        numberOfTries + " tries left.";
             else {
                 message = "You win!\n" +
                         "Number of Tries: " + (7 - numberOfTries);
                 btnGuess.setText("Play Again");
                 gameOver = true;
                 Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
-            }
+            } //Win block
         } catch(Exception e) {
             message = "Please enter a whole number between 1 and 100.";
         } finally {
-            lblOutput.setText(message);
-            txtGuess.requestFocus();
-            txtGuess.selectAll();
+            if ((numberOfTries < 1) && (!gameOver)) {
+                gameOver = true;
+                message = "You lose!\n" +
+                        "The number was " + theNumber;
+                btnGuess.setText("Play Again");
+                lblOutput.setText(message);
+                Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+            } //Lose block
+            else {
+                lblOutput.setText(message);
+                txtGuess.requestFocus();
+                txtGuess.selectAll();
+            }
         }
     }
     public void newGame() {

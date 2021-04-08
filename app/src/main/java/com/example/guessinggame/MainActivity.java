@@ -1,6 +1,7 @@
 package com.example.guessinggame;
 
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import android.preference.PreferenceManager;
 import android.view.KeyEvent;
 import android.view.View;
 
@@ -95,6 +97,8 @@ public class MainActivity extends AppCompatActivity {
         btnGuess = (Button) findViewById(R.id.btnGuess);
         lblOutput = (TextView) findViewById(R.id.lblOutput);
         lblRange = (TextView) findViewById(R.id.lblRange);
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        range = preferences.getInt("range", 100);
         newGame();
         btnGuess.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -150,18 +154,17 @@ public class MainActivity extends AppCompatActivity {
                         switch(which) {
                             case 0:
                                 range = 10;
-                                newGame();
                                 break;
                             case 2:
                                 range = 1000;
-                                newGame();
                                 break;
                             case 1:
                             default:
                                 range = 100;
-                                newGame();
                                 break;
                         }
+                        storeRange(range);
+                        newGame();
                         dialog.dismiss();
                     }
                 });
@@ -193,5 +196,11 @@ public class MainActivity extends AppCompatActivity {
 
 
         return super.onOptionsItemSelected(item);
+    }
+    public void storeRange(int newRange) {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putInt("range", newRange);
+        editor.apply();
     }
 }

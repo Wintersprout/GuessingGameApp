@@ -7,4 +7,19 @@
         android:orderInCategory="100"
         android:title="@string/action_settings"
         app:showAsAction="never" />
+    <item
+        android:id="@+id/action_newgame"
+        android:orderInCategory="100"
+        android:title="@string/action_new_game"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_game_stats"
+        android:orderInCategory="100"
+        android:title="@string/action_game_stats"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_about"
+        android:orderInCategory="100"
+        android:title="@string/action_about"
+        app:showAsAction="never" />
 </menu>

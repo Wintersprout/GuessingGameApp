@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
                         numberOfTries + " tries left.";
             else {
                 message = "You win!\n" +
-                        "Number of Tries: " + (7 - numberOfTries);
+                        "Tries left: " + numberOfTries;
                 btnGuess.setText("Play Again");
                 gameOver = true;
                 Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
@@ -76,8 +76,13 @@ public class MainActivity extends AppCompatActivity {
         txtGuess.requestFocus();
         btnGuess.setText("Guess");
         theNumber = (int)(Math.random() * range + 1);
-        //theNumber = 99;
-        numberOfTries = 7;
+
+        int i = range;
+        numberOfTries = 1;
+        while (i > 1) {
+            i /= 2;
+            numberOfTries++;
+        }
 
     }
 

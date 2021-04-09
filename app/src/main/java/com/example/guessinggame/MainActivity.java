@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
                 editor.apply();
             } //Win block
         } catch(Exception e) {
-            message = "Please enter a whole number between 1 and " + range + ":";
+            message = "Please enter a whole number between 1 and " + range;
         } finally {
             if ((numberOfTries < 1) && (!gameOver)) {
                 gameOver = true;
@@ -70,6 +70,12 @@ public class MainActivity extends AppCompatActivity {
                 btnGuess.setText("Play Again");
                 lblOutput.setText(message);
                 Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+                int gamesLost = preferences.getInt("gamesLost", 0) + 1;
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putInt("gamesLost", gamesLost);
+                editor.apply();
             } //Lose block
             else {
                 lblOutput.setText(message);
@@ -198,9 +204,13 @@ public class MainActivity extends AppCompatActivity {
             case R.id.action_game_stats:
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
                 int gamesWon = preferences.getInt("gamesWon", 0);
+                int gamesLost = preferences.getInt("gamesLost", 0);
+                int totalGames = gamesWon + gamesLost;
+
                 AlertDialog statDialog = new AlertDialog.Builder(MainActivity.this).create();
                 statDialog.setTitle("Statistics");
-                statDialog.setMessage("Wins: " + gamesWon);
+                statDialog.setMessage("Games played: " + totalGames + "\nWins: " + gamesWon +
+                        "\nWin rate: " + (int)(100 * gamesWon/totalGames) + "%");
                 statDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "CLOSE",
                         new DialogInterface.OnClickListener() {
                             @Override

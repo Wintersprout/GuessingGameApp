@@ -22,6 +22,8 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.util.function.Predicate;
+
 public class MainActivity extends AppCompatActivity {
 
     private EditText txtGuess;
@@ -52,6 +54,12 @@ public class MainActivity extends AppCompatActivity {
                 btnGuess.setText("Play Again");
                 gameOver = true;
                 Toast.makeText(MainActivity.this, message, Toast.LENGTH_LONG).show();
+                //Save the victory in the shared preferences
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+                int gamesWon = preferences.getInt("gamesWon", 0) + 1;
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putInt("gamesWon", gamesWon);
+                editor.apply();
             } //Win block
         } catch(Exception e) {
             message = "Please enter a whole number between 1 and " + range + ":";
@@ -188,6 +196,19 @@ public class MainActivity extends AppCompatActivity {
                 aboutDialog.show();
                 return true;
             case R.id.action_game_stats:
+                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+                int gamesWon = preferences.getInt("gamesWon", 0);
+                AlertDialog statDialog = new AlertDialog.Builder(MainActivity.this).create();
+                statDialog.setTitle("Statistics");
+                statDialog.setMessage("Wins: " + gamesWon);
+                statDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "CLOSE",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.dismiss();
+                            }
+                        });
+                statDialog.show();
                 return true;
             default:
                 //return super.onOptionsItemSelected(item);
